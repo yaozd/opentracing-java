@@ -13,8 +13,8 @@ public class NettyExtractAdapter implements TextMap {
 
     public NettyExtractAdapter() {
         Map<String, String> map = new HashMap<>();
-        map.put("traceid", "traceid");
-        map.put("spanid", "spanid");
+        map.put("traceid", "traceid-e0ca2246-3541");
+        map.put("spanid", "spanid-4452-8e8d-b993f5c060dc");
         this.headers = map.entrySet();
     }
 

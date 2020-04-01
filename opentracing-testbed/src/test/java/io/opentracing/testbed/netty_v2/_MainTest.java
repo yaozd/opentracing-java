@@ -2,9 +2,8 @@ package io.opentracing.testbed.netty_v2;
 
 import io.opentracing.SpanContext;
 import io.opentracing.propagation.Format;
-import io.opentracing.testbed.netty_v2.impl.NettyExtractAdapter;
-import io.opentracing.testbed.netty_v2.impl.NettySpan;
-import io.opentracing.testbed.netty_v2.impl.NettyTracer;
+import io.opentracing.tag.Tags;
+import io.opentracing.testbed.netty_v2.impl.*;
 import io.opentracing.util.ThreadLocalScopeManager;
 import org.junit.Test;
 
@@ -30,10 +29,15 @@ public class _MainTest {
     }
 
     @Test
-    public void extractTest() {
+    public void extractAndInjectTest() {
+        //extract
         SpanContext extractedContext = tracer.extract(Format.Builtin.HTTP_HEADERS, new NettyExtractAdapter());
         NettySpan parent = tracer.buildSpan("parent").asChildOf(extractedContext).start();
+        //inject
+        tracer.inject(parent.context(),Format.Builtin.HTTP_HEADERS,new NettyInjectAdapter());
+        //
         NettySpan child = tracer.buildSpan("child").asChildOf(parent).start();
+        child.setTag(NettyTags.HTTP_URL.getKey(),"www.google.com");
         child.finish();
         parent.finish();
         List<NettySpan> spans = tracer.finishedSpans();

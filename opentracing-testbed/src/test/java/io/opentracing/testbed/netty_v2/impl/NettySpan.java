@@ -343,7 +343,7 @@ public final class NettySpan implements Span {
     }
 
     static long nowMicros() {
-        return System.currentTimeMillis() * 1000;
+        return System.currentTimeMillis();
     }
 
     private synchronized void finishedCheck(String format, Object... args) {
@@ -356,10 +356,14 @@ public final class NettySpan implements Span {
 
     @Override
     public String toString() {
+        for (Map.Entry<String, Object> entry : tags.entrySet()) {
+            System.out.println("Tag: Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
         return "{" +
                 "traceId:" + context.traceId() +
                 ", spanId:" + context.spanId() +
                 ", parentId:" + parentId +
+                ", duration:" + (finishMicros-startMicros) +
                 ", operationName:\"" + operationName + "\"}";
     }
 }
