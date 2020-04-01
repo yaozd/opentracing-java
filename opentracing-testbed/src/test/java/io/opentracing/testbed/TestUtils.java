@@ -16,6 +16,7 @@ package io.opentracing.testbed;
 import io.opentracing.mock.MockSpan;
 import io.opentracing.mock.MockTracer;
 import io.opentracing.tag.AbstractTag;
+import io.opentracing.testbed.netty_v3.impl.NettyTracer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +30,14 @@ import static org.junit.Assert.assertEquals;
 
 public class TestUtils {
 
+    public static Callable<Integer> finishedSpansSize(final NettyTracer tracer) {
+        return new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                return tracer.finishedSpans().size();
+            }
+        };
+    }
     public static Callable<Integer> finishedSpansSize(final MockTracer tracer) {
         return new Callable<Integer>() {
             @Override
