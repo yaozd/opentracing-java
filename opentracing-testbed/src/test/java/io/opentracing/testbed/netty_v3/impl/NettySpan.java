@@ -356,14 +356,27 @@ public final class NettySpan implements Span {
 
     @Override
     public String toString() {
-        for (Map.Entry<String, Object> entry : tags.entrySet()) {
-            System.out.println("Tag: Key = " + entry.getKey() + ", Value = " + entry.getValue());
-        }
         return "{" +
                 "traceId:" + context.traceId() +
                 ", spanId:" + context.spanId() +
                 ", parentId:" + parentId +
-                ", duration:" + (finishMicros-startMicros) +
+                ", duration:" + (finishMicros - startMicros) +
+                ", tags:" + mapToJson(tags) +
                 ", operationName:\"" + operationName + "\"}";
+    }
+
+    private String mapToJson(Map<String, Object> map) {
+        StringBuilder json = new StringBuilder();
+        int size = map.size();
+        int i = 0;
+        json.append("{");
+        for (Map.Entry<String, Object> entry : tags.entrySet()) {
+            json.append("\"" + entry.getKey() + "\"" + ":" + "\"" + entry.getValue() + "\"");
+            if (++i < size) {
+                json.append(",");
+            }
+        }
+        json.append("}");
+        return json.toString();
     }
 }
