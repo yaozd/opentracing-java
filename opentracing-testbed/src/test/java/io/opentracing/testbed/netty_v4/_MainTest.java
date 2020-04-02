@@ -14,10 +14,22 @@ import static org.awaitility.Awaitility.await;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * PS:标记采样|重点事务
+ * Tracer mark sampling
+ */
 public class _MainTest {
     private final NettyTracer tracer = new NettyTracer(new ThreadLocalScopeManager(),
             NettyTracer.Propagator.TEXT_MAP);
 
+    /**
+     * eg;1 span
+     * tracer humanSizeOf:792 bytes
+     * tracer humanSizeOf:377.7 MB
+     * eg:2 span
+     * tracer humanSizeOf:1.5 KB
+     * tracer humanSizeOf:713.3 MB
+     */
     @Test
     public void test() {
         NettySpan parent = tracer.buildSpan("parent").start();
